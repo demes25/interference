@@ -10,7 +10,7 @@
                 "main.c",
                 "intensity.c",
                 "diffraction.c",
-                "-L../library",
+                "-L../clib",
                 "-ll",
                 "-L../cerf",
                 "-lcerf",

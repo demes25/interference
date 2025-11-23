@@ -7,8 +7,8 @@
 #ifndef INTENSITY
 #define INTENSITY
 
-#include"../library/image.h"
-#include"../library/math.h"
+#include"../clib/image.h"
+#include"../clib/math.h"
 
 // Here I will try to create a program that intakes
 // "slits" as a Bitmap (0 if slit, 1 if no slit)
