@@ -14,16 +14,16 @@
 // "slits" as a Bitmap (0 if slit, 1 if no slit)
 // and outputs an Image that represents the diffraction pattern
 
-
 #define lambda_unit 1e-9 // nanometer
 #define slit_unit 1e-3 // milimeter
 #define wall_unit 5e-5 // 50 micrometers
 
-// wavelengths will be in nanometers
-static double wavelength;
-// lambda will be adjusted to be in meters.
-static double lambda;
 
+
+
+
+
+// ----------- DISCRETE APPROXIMATIONS ----------- //
 
 // the value at a point on the wall (X, Y, L)
 // of the wave of light exiting a slit at (x, y, 0) 
@@ -110,7 +110,13 @@ double taylor_discrete_intensity(Bitmap* slits, int slit_origin_h, int slit_orig
 double sea_discrete_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L);
 
 
-// ---------- //
+
+
+
+
+
+
+// ----------- CONTINUOUS APPROXIMATIONS ----------- //
 
 // now, we will treat the intensity CONTINUOUSLY
 
@@ -168,8 +174,8 @@ double sea_discrete_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_
 // in the original repository cloned from the above url.
 #include"../cerf/cerf.h" 
 
-Complex taylor_continuous_waveAt(double lambda, double x_lower, double x_upper, double X, double y_lower, double y_upper, double Y, double L);
-double taylor_continuous_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L);
+Complex taylor_cerf_waveAt(double lambda, double x_lower, double x_upper, double X, double y_lower, double y_upper, double Y, double L);
+double taylor_cerf_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L);
 
 
 // *** FRAUNHOFER INTEGRAL *** //

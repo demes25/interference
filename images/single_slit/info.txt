@@ -1,0 +1,13 @@
+Here I used:
+
+lambda_unit 1e-9 // nanometer
+slit_unit 1e-3 // milimeter
+wall_unit 5e-5 // 50 micrometers
+
+dimensions 1000 x 1000
+wavelength 690
+wall separation 10
+brighten 2.0
+
+(note) our discrete approximations yield no useful results here. a single point-aperture
+simply creates a uniform fill with no interference.

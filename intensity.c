@@ -248,7 +248,7 @@ void _gauss_antiderivs_upto_even(Complex* result, unsigned int n, Complex z){
 }
 
 
-Complex taylor_continuous_waveAt(double lambda, double y_lower, double y_upper, double Y, double x_lower, double x_upper, double X, double L){
+Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double Y, double x_lower, double x_upper, double X, double L){
     // f ~ exp(-z^2)(1 - i/2Lk  z^4 - 1/(8 L^2 k^2)  z^8)) 
 
     // we write explicitly in terms of xi and chi
@@ -319,8 +319,8 @@ Complex taylor_continuous_waveAt(double lambda, double y_lower, double y_upper, 
     return first_term - second_term * I/(_2L * k) - third_term/(8*L*L*k*k);
 }
 
-double taylor_continuous_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L) {
-    return _generic_continuous_intensity(slits, slit_origin_h, slit_origin_w, lambda, Y, X, L, taylor_continuous_waveAt);
+double taylor_cerf_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L) {
+    return _generic_continuous_intensity(slits, slit_origin_h, slit_origin_w, lambda, Y, X, L, taylor_cerf_waveAt);
 }
 
 

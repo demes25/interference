@@ -1,14 +1,31 @@
 #include"./diffraction.h"
 
+// The functions used to calculate intensity are all defined in intensity.h/.c
+//
+// We may specify which functions we would like to use by defining the relevant 
+// macros in diffraction.h
+//
+// We may also define how much we want the program to 'brighten' the fringes,
+// again via macros in the diffraction.h header file.
+//
+// Units for slit sizes, wall pixel sizes, and wavelengths may be adjusted in intensity.h
+#include <time.h>
+#include <stdio.h>
+
 
 int main() {
 
-    Bitmap* slits = importBitmap("slits0.ppm");
+    Bitmap* slits = importBitmap("images/single_slit/slits.ppm");
 
-    // this does not work for non-square walls.
-    Image* pattern = diffract(slits, 1000, 1000, 690, 10);
+    clock_t s = clock();
+    Image* pattern = diffract(slits, 1000, 1000, 610, 10);
+    clock_t e = clock();
 
-    exportImage(pattern, "blargh_fraun_brightened.ppm");
+    clock_t dif = e-s;
+
+    println_double((double)dif);
+
+    exportImage(pattern, "images/test.ppm");
 
     deleteBitmap(slits);
     deleteImage(pattern);

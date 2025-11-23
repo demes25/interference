@@ -89,6 +89,7 @@ Matrix* intensityMatrix(Bitmap* slits, Matrix* wall, double wavelength, double L
         }
     }
 
+
     // we will normalize this so that the maximum entry in the matrix is 1.
     double max = 0.0;
 
