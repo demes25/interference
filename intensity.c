@@ -80,7 +80,9 @@ double _generic_continuous_intensity(Bitmap* slits, int slit_origin_h, int slit_
 
 // this one does not make ANY approximations as to the distance
 // between (x, y, 0) and (X, Y, L)
-
+//
+// returns the intensity at point (X, Y) on a wall L meters away,
+// given monochromatic light of wavelength lambda and a slit configuration (@param slits)
 Complex exact_discrete_waveAt(double lambda, double y, double x, double Y, double X, double L) {
     double dist = sqrt(square(x - X) + square(y - Y) + square(L));
     double s = TAU * dist / lambda; 
@@ -247,7 +249,10 @@ void _gauss_antiderivs_upto_even(Complex* result, unsigned int n, Complex z){
     // antiderivative of z^2i exp(-z^2)
 }
 
-
+// returns the complex amplitude of the wave on a wall L meters away, at wall coordinates (X, Y);
+// by integrating the wave amplitude over the bounds (x_lower, x_upper) x (y_lower, y_upper)
+// according to the approximation of the integrand to the second order by taylor,
+// and using the complex error function (from libcerf) for gaussian integrals.
 Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double Y, double x_lower, double x_upper, double X, double L){
     // f ~ exp(-z^2)(1 - i/2Lk  z^4 - 1/(8 L^2 k^2)  z^8)) 
 
@@ -270,11 +275,15 @@ Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double
     // we verify that kr^4/(8L^3) << 1
     double condition = k * square(square(x_upper - X) + square(y_upper - Y))/(8*L*L*L);
     if (condition > 0.1){
-        print_double(condition);
+        println_cstr('Warning: the following value is not << 1');
+        println_double(condition);
     }
 
     Complex z_factor = (1-I) * sqrt(k/(2 * _2L)); // sqrt(-ik/2L) = sqrt(i)* sqrt(k/2L) = [(1-i)/sqrt(2)] sqrt(k/2L)
 
+    // we find integral values by fundl th of calc.
+    // - i.e. evaluate the antiderivatives at xi_up, xi_low
+    // and then store and work with (xi_up - xi_low)
     Complex xi_up = z_factor * (x_upper - X);
     Complex xi_low = z_factor * (x_lower - X);
     Complex chi_up = z_factor * (y_upper - Y);
@@ -282,6 +291,7 @@ Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double
 
     Complex xi_temp[2][n + 1]; 
     Complex chi_temp[2][n + 1];
+    // populate temp arrays with antiderivatives
     _gauss_antiderivs_upto_even(xi_temp[1], n, xi_up);
     _gauss_antiderivs_upto_even(xi_temp[0], n, xi_low);
     _gauss_antiderivs_upto_even(chi_temp[1], n, chi_up);
@@ -289,13 +299,14 @@ Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double
 
     Complex xi[n+1];
     Complex chi[n+1];
-
+    // subtract antiderivative values at bounds to yield the integral.
     for (int i=0; i <= n ; i+=1){
         xi[i] = xi_temp[1][i] - xi_temp[0][i];
         chi[i] = chi_temp[1][i] - chi_temp[0][i];
     }
 
     // we write explicitly in terms of xi and chi
+    // the complex amplitude f of the light wave is given by approximately
     // f ~ exp(-xi^2) exp(-chi^2) 
     //    - i/2Lk 
     //          ( xi^4 exp(-xi^2) exp(-chi^2) 
@@ -310,15 +321,29 @@ Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double
     //          + exp(-xi^2) exp(-chi^2) chi^8 
     //          )
     //     )
+    //
+    // since xi and chi are independent variables, we may
+    // integrate the xi/chi dependencies separately, evaluate at 
+    // the respective bounds, and then multiply them together.
+    //
+    // we do this for each additive term, by linearity.
     Complex first_term = xi[0] * chi[0];
 
     Complex second_term = xi[2] * chi[0] + 2 * xi[1] * chi[1] + xi[0] * chi[2];
     
     Complex third_term = (xi[4] * chi[0] + xi[0] * chi[4]) + 4 * (xi[3] * chi[1] + xi[1] * chi[3]) + 6 * xi[2]*chi[2];
 
+    // we then calculate each order term, multiply with the corresponding overall coefficient,
+    // and add together.
     return first_term - second_term * I/(_2L * k) - third_term/(8*L*L*k*k);
+    // we return the integral, over the desired source (slit) pixel,
+    // of the expression detailed in previous comments.
 }
 
+// uses the continuous taylor approximation + cerf for gaussian integrals.
+//
+// returns the intensity at point (X, Y) on a wall L meters away,
+// given monochromatic light of wavelength lambda and a slit configuration (@param slits)
 double taylor_cerf_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_w, double lambda, double Y, double X, double L) {
     return _generic_continuous_intensity(slits, slit_origin_h, slit_origin_w, lambda, Y, X, L, taylor_cerf_waveAt);
 }
