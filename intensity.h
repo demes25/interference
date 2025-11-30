@@ -167,11 +167,8 @@ double sea_discrete_intensity(Bitmap* slits, int slit_origin_h, int slit_origin_
 // note here we must calculate the error function of a complex number, which
 // is an operation not included in the standard c library. 
 // 
-// as such, I will be using the libcerf library from MIT
+// as such, I will be using the MIT-license 'libcerf' library
 // https://jugit.fz-juelich.de/mlz/libcerf.git
-// which I have here pre-compiled into a static .a library.
-// the files in ../cerf contain the relevant license text as included
-// in the original repository cloned from the above url.
 #include"../cerf/cerf.h" 
 
 Complex taylor_cerf_waveAt(double lambda, double x_lower, double x_upper, double X, double y_lower, double y_upper, double Y, double L);

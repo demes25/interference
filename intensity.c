@@ -235,7 +235,7 @@ void _gauss_antiderivs_upto_even(Complex* result, unsigned int n, Complex z){
     // i[z exp(-z^2)] = 1/2 (1-exp(-z^2))
     // I[z^n exp(-z^2)] = -z^(n-1)/2 exp(-z^2) + (n-1)/2  I[z^(n-2) exp(-z^2)]   
 
-    // cerf used from libcerf copyright MIT
+    // cerf used from the MIT-licensed 'libcerf' library:
     // https://jugit.fz-juelich.de/mlz/libcerf.git
     result[0] = sqrt(PI/2) * cerf(z); 
     
