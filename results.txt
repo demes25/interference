@@ -3,9 +3,8 @@ between the various discrete and continuous approximations we have used here.
 
 -- 1 --
 RUNTIMES
-for my computer - good specs, but should give a good feel of relative speed 
-of calculation between functions. I give approximate average runtimes here in terms of
-seconds per slit pixel per million wall pixels
+my computer has some pretty niche specs, but this should give a good feel of relative time complexity between our various approximation methods. 
+I give approximate average runtimes here in terms of seconds per slit pixel per million wall pixels.
 
 discrete
 -- sea -- 0.67
@@ -13,29 +12,20 @@ discrete
 -- exact -- 0.86
 
 continuous
--- taylor -- 3.9
+-- taylor cerf -- 4.2
 -- fraunhofer -- 1.0
 
-In general these functions all run in constant time per slit pixel per wall pixel.
-That is, if we have n slit pixels for an N x M wall, this program is O(nNM)
+In general these functions all run in constant time per (active) slit pixel per wall pixel. By active slit pixel, I mean pixels on the slit map that are set to 0 - i.e. are "open" apertures and actually contribute to the interference. So, if we have n slit pixels for an N x M wall, this program is O(nNM)
 
 -- 2 --
 QUALITATIVE
 
-I will just provide overall thoughts here based on the images provided in the 
-images folder. 
+I will just provide overall thoughts here based on the images provided in the images folder. 
 
-The small equal angle approximation is definitely the worst overall. No significant 
-benefits brought by speed given the extremely low accuracy. I will be ignoring 
-this approximation for coming comparisons. 
+The small equal angle approximation is definitely the worst overall. No significant benefits brought by speed given the extremely low accuracy. Approximating equal angles assumes all configurations are circularly symmetric, which is highly incorrect except for select cases. I will be ignoring this approximation for coming comparisons. 
 
-The exact discrete and taylor discrete approximations are nearly indistinguishable in both 
-results and runtimes. They are also quite accurate, barring the lack of interference for a single-pixel slit.
+The exact discrete and taylor discrete approximations are nearly indistinguishable in both results and runtimes. They are also quite accurate, barring the lack of interference for a single-pixel slit.
 
-The fraunhofer integral approximation provides good time comparable to the above discrete approximations, 
-and it interferes for a single-pixel slit. However, it strangely centers the image for an off-center slit,
-and does not match with other approximations for multi-pixel slit configurations. 
+The fraunhofer integral approximation provides good time comparable to the above discrete approximations, and it interferes for a single-pixel slit. However, it strangely centers the display image for an off-center slit, and does not match well with other approximations for multi-pixel slit configurations. 
 
-The continuous taylor approximation is heavy on runtime, but provides highly accurate diffraction patterns,
-matching the exact discrete and taylor discrete approximations for multi-pixel configurations, and correctly
-interfering for a single-pixel slit.
+The continuous cerf approximation is heavy on runtime, but provides highly accurate diffraction patterns. It matches the exact discrete and taylor discrete approximations for multi-pixel configurations, and correctly interferes for a single-pixel slit.

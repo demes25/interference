@@ -275,7 +275,7 @@ Complex taylor_cerf_waveAt(double lambda, double y_lower, double y_upper, double
     // we verify that kr^4/(8L^3) << 1
     double condition = k * square(square(x_upper - X) + square(y_upper - Y))/(8*L*L*L);
     if (condition > 0.1){
-        println_cstr('Warning: the following value is not << 1');
+        println_cstr("Warning: the following value is not << 1");
         println_double(condition);
     }
 
