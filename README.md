@@ -43,14 +43,14 @@ Here I will briefly detail the approximation methods studied in this project.
 Discrete approximations treat each pixel as a point-slit located at the upper-left corner of the pixel. In other words, we treat the aperture function A(x, y), mentioned above, as a collection of delta functions at the upper-left corners of each of the relevant slit pixels. This allows us to simply sum individual discrete values of exp(ikR) evaluated at different R. 
 
 - sea - 'small equal angles', uses a generalized version of the same approximation taught for double-slit interference in standard undergrad physics courses. 
-- exact - calculates the exact distance R by using the Pythagorean norm noted.
+- exact - calculates the exact distance R by using the Pythagorean norm noted above.
 - taylor - approximates the distance R to second order by assuming that the horizontal separation L is much larger than the vertical distance between the slit points and the display points.
 
 ### continuous
 
 Continuous approximations treat each pixel as a full slit and attempt to approximate the integral itself instead of the aperture function. In other words, we take the aperture function A(x, y) to be 1 if (x, y) falls on an open slit, and 0 else. This requires some jumping through hoops.
 
-All of the current continuous approximations assume that the horizontal separation L is much larger than the vertical distance between the slit points and the display points.
+All of the current continuous approximations assume that the horizontal separation L is much larger than the maximum xy-plane distance between the slit points and the display points.
 
-- fraunhofer - the Fraunhofer integral approximation is well-substantiated for approximating far-field diffraction. It approximates R to first order, and then approximates the slit coordinates (x, y) to each be much smaller than the display wall coordinates (X, Y). This yields a simple integral of products of exp(ikx) or exp(iky) and acts as a fast continuous approximation.
-- taylor + cerf - this approximation is of my own design. It approximates R to second order in the exponential, which leaves a gaussian-like term with a squared exponent, and a higher order term with a quartic exponent. It then approximates the higher-order quartic exponential term to second order via Taylor's. In total this yields a sum of gaussian-weighted polynomials. It then applies integration by parts, along with the complex error function library (cerf) mentioned above, to calculate the relevant integrals of the gaussian-weighted polynomials. 
+- fraunhofer - the Fraunhofer integral approximation is well-substantiated for approximating far-field diffraction. It approximates R to first order, and then approximates the slit coordinates (x, y) to each be much smaller than the display wall coordinates (X, Y). This yields a simple integral of products of exp(ikx) and exp(iky) and acts as a fast continuous approximation.
+- taylor + cerf - this approximation is of my own design. It approximates R to second order in the exponential, which leaves a gaussian-like term with a squared exponent, and a higher order term with a quartic exponent. It then approximates the higher-order quartic exponential term to second order via Taylor's. In total, this yields a sum of gaussian-weighted polynomials. It then applies integration by parts, along with the complex error function library (cerf) mentioned above, to calculate the relevant integrals of the gaussian-weighted polynomials. 
